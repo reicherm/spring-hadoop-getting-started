@@ -1,11 +1,11 @@
-@Grab("org.springframework.data:spring-data-hadoop:2.0.0.RELEASE-hadoop24")
+@Grab("org.springframework.data:spring-data-hadoop:2.0.1.RELEASE-hadoop24")
 
 import org.apache.hadoop.fs.FileStatus
 import org.springframework.data.hadoop.fs.FsShell
 
 public class Application implements CommandLineRunner {
 
-	@Autowired FsShell fsShell;
+    @Autowired FsShell fsShell;
 
     void run(String... strings) throws Exception {
         println "*** HDFS content:" 
