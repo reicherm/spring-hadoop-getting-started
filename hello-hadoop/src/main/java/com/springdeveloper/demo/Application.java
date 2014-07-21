@@ -17,25 +17,25 @@ public class Application implements CommandLineRunner {
         SpringApplication.run(Application.class, args);
     }
 
-	@Autowired
-	FsShell fsShell;
+    @Autowired
+    FsShell fsShell;
 
-	@Override
+    @Override
     public void run(String... strings) throws Exception {
         System.out.println("HELLO!!!");
-		for (FileStatus fs : fsShell.ls("/")) {
-			System.out.println(fs.getOwner() +
-					" " +  fs.getGroup() +
-					": " + fs.getPath().getName());
-		}
+        for (FileStatus fs : fsShell.ls("/")) {
+            System.out.println(fs.getOwner() +
+                    " " +  fs.getGroup() +
+                    ": " + fs.getPath().getName());
+        }
 
-	}
+    }
 
-	@Bean
-	FsShell fsShell() {
-		org.apache.hadoop.conf.Configuration hadoopConfiguration =
-				new org.apache.hadoop.conf.Configuration();
-		hadoopConfiguration.set("fs.defaultFS", "hdfs://localhost:8020");
-		return new FsShell(hadoopConfiguration);
-	}
+    @Bean
+    FsShell fsShell() {
+        org.apache.hadoop.conf.Configuration hadoopConfiguration =
+                new org.apache.hadoop.conf.Configuration();
+        hadoopConfiguration.set("fs.defaultFS", "hdfs://localhost:8020");
+        return new FsShell(hadoopConfiguration);
+    }
 }
