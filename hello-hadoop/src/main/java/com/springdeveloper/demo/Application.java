@@ -26,7 +26,7 @@ public class Application implements CommandLineRunner {
         for (FileStatus fs : fsShell.ls("/")) {
             System.out.println(fs.getOwner() +
                     " " +  fs.getGroup() +
-                    ": " + fs.getPath().getName());
+                    ": /" + fs.getPath().getName());
         }
 
     }
