@@ -22,13 +22,12 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-        System.out.println("HELLO!!!");
+        System.out.println("*** HDFS content:");
         for (FileStatus fs : fsShell.ls("/")) {
             System.out.println(fs.getOwner() +
                     " " +  fs.getGroup() +
                     ": /" + fs.getPath().getName());
         }
-
     }
 
     @Bean
