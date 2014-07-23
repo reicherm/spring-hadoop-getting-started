@@ -43,7 +43,5 @@ buildscript {
 }
 
 task wrapper(type: Wrapper) {
-	description = "Generates build_xd[.bat] scripts"
 	gradleVersion = "2.0"
-	scriptFile= "gradle/build_xd"
 }
