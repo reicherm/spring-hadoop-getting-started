@@ -15,39 +15,36 @@
  */
 package com.springdeveloper.demo;
 
-import org.apache.hive.jdbc.HiveDriver;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.velocity.VelocityAutoConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
-import javax.sql.DataSource;
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 
 @EnableAutoConfiguration(exclude={VelocityAutoConfiguration.class})
 @Configuration
-//@PropertySource("classpath:/hive.properties")
 public class Application implements CommandLineRunner {
 
-	@Autowired
-	private DataSource dataSource;
+	@Inject
+	JdbcTemplate hive2;
 
-//	@Value("${hive.url}")
-//	String hiveUrl;
+	@Value("${tweets.input}")
+	String input;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
 	public void run(String... strings) throws Exception {
-		System.out.println("Running Hive task with '" + dataSource + "' ...");
+		System.out.println("Running Hive task using data from '" + input + "' ...");
+		String ddl = "create external table if not exists tweetdata (value STRING) LOCATION '" + input + "'";
+		hive2.execute(ddl);
 		String query =
 				"select tweets.username, tweets.followers " +
 				"from " +
@@ -57,22 +54,11 @@ public class Application implements CommandLineRunner {
 				"    from tweetdata t" +
 				"  ) tweets " +
 				"order by tweets.followers desc limit 10";
-		JdbcTemplate jdbc = new JdbcTemplate(dataSource);
-		List<Map<String, Object>> results = jdbc.queryForList(query);
+		List<Map<String, Object>> results = hive2.queryForList(query);
 		System.out.println("Results: ");
 		for (Map<String, Object> r : results) {
 			System.out.println(r.get("tweets.username") + " : " + r.get("tweets.followers"));
 		}
 	}
-
-//	@Bean
-//	DataSource dataSource() {
-//		return new SimpleDriverDataSource(new HiveDriver(), "jdbc:hive2://borneo:10000/");
-//	}
-
-//	@Bean
-//	static PropertySourcesPlaceholderConfigurer getPropertySourcesPlaceholderConfigurer() {
-//		return new PropertySourcesPlaceholderConfigurer();
-//	}
 
 }

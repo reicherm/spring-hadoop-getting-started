@@ -17,7 +17,7 @@ public class Application implements CommandLineRunner {
     @Bean FsShell fsShell() {
         org.apache.hadoop.conf.Configuration hadoopConfiguration = 
                 new org.apache.hadoop.conf.Configuration()
-        hadoopConfiguration.set("fs.defaultFS", "hdfs://localhost:8020")
+        hadoopConfiguration.set("fs.defaultFS", "hdfs://borneo:8020")
         return new FsShell(hadoopConfiguration);
     }
 }
