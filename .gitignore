@@ -8,4 +8,9 @@ release.properties
 *.iml
 *.ipr
 *.iws
-
+*/.settings/
+*/.classpath
+*/.project
+*/.gradle/
+*/build/
+*.log
