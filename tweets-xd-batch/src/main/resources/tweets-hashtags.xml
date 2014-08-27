@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:hadoop="http://www.springframework.org/schema/hadoop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/hadoop http://www.springframework.org/schema/hadoop/spring-hadoop.xsd
+		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:property-placeholder properties-ref="myProperties" />
+
+	<util:properties id="myProperties" >
+		<prop key="tweets.input.path">/xd/tweets/*.txt</prop>
+		<prop key="tweets.output.path">/xd/hashtagcount/output/</prop>
+	</util:properties>
+
+	<hadoop:configuration>
+		fs.defaultFS=${spring.hadoop.fsUri}
+		yarn.resourcemanager.address=${spring.hadoop.resourceManagerHost}
+	</hadoop:configuration>
+
+	<!-- required since Hadoop Job is a class not an interface and we need to use a Job with step scope to access #{jobParameters['...']} -->
+	<bean class="org.springframework.batch.core.scope.StepScope">
+		<property name="proxyTargetClass" value="true"/>
+	</bean>
+
+	<batch:job id="job">
+		<batch:step id="hashtagcount">
+			<batch:tasklet ref="hashtagcount-tasklet" />
+		</batch:step>
+	</batch:job>
+
+	<hadoop:job-tasklet id="hashtagcount-tasklet" job-ref="hashtagcountJob"/>
+
+	<hadoop:job id="hashtagcountJob"
+		input-path="${tweets.input.path}"
+		output-path="${tweets.output.path}"
+		libs="file:${xd.home}/modules/job/tweets-hashtags/lib/tweets-hashtags-0.1.0.jar"
+		mapper="com.springdeveloper.demo.batch.xd.HashtagCount$TokenizerMapper"
+		reducer="com.springdeveloper.demo.batch.xd.HashtagCount$LongSumReducer"
+		scope="step" />
+
+</beans>
+
