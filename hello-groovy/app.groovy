@@ -1,4 +1,4 @@
-@Grab("org.springframework.data:spring-data-hadoop:2.0.1.RELEASE-hadoop24")
+@Grab("org.springframework.data:spring-data-hadoop:2.0.2.RELEASE-hadoop24")
 
 import org.apache.hadoop.fs.FileStatus
 import org.springframework.data.hadoop.fs.FsShell

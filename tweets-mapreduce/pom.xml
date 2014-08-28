@@ -20,7 +20,7 @@
 	</parent>
 
 	<properties>
-		<spring-data-hadoop.version>2.0.1.RELEASE-hadoop24</spring-data-hadoop.version>
+		<spring-data-hadoop.version>2.0.2.RELEASE-hadoop24</spring-data-hadoop.version>
 		<hadoop.version>2.4.1</hadoop.version>
 		<guava.version>16.0.1</guava.version>
 		<java.version>1.7</java.version>
