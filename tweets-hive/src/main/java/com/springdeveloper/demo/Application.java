@@ -20,10 +20,19 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.velocity.VelocityAutoConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.init.DataSourceInitializer;
+import org.springframework.jdbc.datasource.init.DatabasePopulator;
+import org.springframework.jdbc.datasource.init.ScriptException;
 
 import javax.inject.Inject;
+import javax.sql.DataSource;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 
@@ -43,8 +52,6 @@ public class Application implements CommandLineRunner {
 
 	public void run(String... strings) throws Exception {
 		System.out.println("Running Hive task using data from '" + input + "' ...");
-		String ddl = "create external table if not exists tweetdata (value STRING) LOCATION '" + input + "'";
-		hive2.execute(ddl);
 		String query =
 				"select tweets.username, tweets.followers " +
 				"from " +
@@ -61,4 +68,21 @@ public class Application implements CommandLineRunner {
 		}
 	}
 
+	@Bean
+	DataSourceInitializer hiveInitializer(final DataSource dataSource) {
+		final String ddl = "create external table if not exists tweetdata (value STRING) LOCATION '" + input + "'";
+		final DataSourceInitializer dsi = new DataSourceInitializer();
+	    dsi.setDataSource(dataSource);
+		dsi.setDatabasePopulator(new DatabasePopulator() {
+			@Override
+			public void populate(Connection conn) throws SQLException,
+					ScriptException {
+				Statement st = conn.createStatement();
+				st.execute(ddl);
+				st.close();
+			}
+		});
+		return dsi;
+	}
+	
 }
