@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.velocity.VelocityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -36,7 +35,7 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 
-@EnableAutoConfiguration(exclude={VelocityAutoConfiguration.class})
+@EnableAutoConfiguration
 @Configuration
 public class Application implements CommandLineRunner {
 

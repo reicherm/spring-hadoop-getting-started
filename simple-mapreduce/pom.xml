@@ -6,11 +6,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.springdeveloper.demo</groupId>
-	<artifactId>tweets-hive</artifactId>
+	<artifactId>simple-mapreduce</artifactId>
 	<version>0.1.0</version>
 
-	<name>tweets-hive</name>
-	<description>Tweets Hive2 App</description>
+	<name>tweets-mapreduce</name>
+	<description>Tweets Hadoop MapReduce App</description>
 
 	<parent>
 		<groupId>io.spring.platform</groupId>
@@ -22,7 +22,6 @@
 	<properties>
 		<spring-data-hadoop.version>2.0.2.RELEASE-hadoop24</spring-data-hadoop.version>
 		<hadoop.version>2.4.1</hadoop.version>
-		<hive.version>0.13.1</hive.version>
 		<guava.version>16.0.1</guava.version>
 		<java.version>1.7</java.version>
 	</properties>
@@ -34,16 +33,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jdbc</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j</artifactId>
 		</dependency>
 		<dependency>
@@ -51,15 +40,9 @@
 			<artifactId>spring-data-hadoop</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.hive</groupId>
-			<artifactId>hive-jdbc</artifactId>
-			<version>${hive.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.velocity</groupId>
-					<artifactId>velocity</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>com.springdeveloper.demo</groupId>
+			<artifactId>tweets-mapreduce</artifactId>
+			<version>0.1.0</version>
 		</dependency>
 	</dependencies>
  
@@ -76,7 +59,24 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-		</plugins>
+ 			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+					    	<outputDirectory>${project.build.directory}/lib</outputDirectory>
+					    	<includeArtifactIds>tweets-mapreduce</includeArtifactIds>
+					    	<stripVersion>true</stripVersion>
+							<excludeTransitive>true</excludeTransitive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+ 		</plugins>
 	</build>
 
 </project>
