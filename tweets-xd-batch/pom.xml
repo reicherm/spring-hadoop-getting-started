@@ -3,10 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.springdeveloper.demo</groupId>
-	<artifactId>tweets-hashtags</artifactId>
+	<artifactId>tweets-xd-batch</artifactId>
 	<version>0.1.0</version>
 
-	<name>Spring XD Example MapReduce Batch Job</name>
+	<name>tweets-xd-batch</name>
+	<description>Spring XD Example MapReduce Batch Job</description>
 	<packaging>jar</packaging>
 
 	<parent>
@@ -22,6 +23,7 @@
 		<guava.version>16.0.1</guava.version>
 		<java.version>1.7</java.version>
 		<spring.xd.home>${env.XD_HOME}</spring.xd.home>
+		<spring.xd.job>tweets-hashtags</spring.xd.job>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -41,6 +43,19 @@
 			<artifactId>hadoop-mapreduce-client-jobclient</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.springdeveloper.demo</groupId>
+			<artifactId>tweets-mapreduce</artifactId>
+			<version>0.1.0</version>
+			<scope>runtime</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-mapreduce-client-core</artifactId>
+				</exclusion>
+			</exclusions>
+			
+		</dependency>
 	</dependencies>
 
 	<repositories>
@@ -52,6 +67,23 @@
 
 	<build>
 		<plugins>
+ 			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+					    	<outputDirectory>${project.build.directory}/xd-lib</outputDirectory>
+					    	<includeArtifactIds>tweets-mapreduce</includeArtifactIds>
+					    	<stripVersion>true</stripVersion>
+							<excludeTransitive>true</excludeTransitive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.4</version>
@@ -82,10 +114,10 @@
 						</goals>
 						<configuration>
 							<target>
-								<copy todir="${spring.xd.home}/modules/job/${project.artifactId}/config">
+								<copy todir="${spring.xd.home}/modules/job/${spring.xd.job}/config">
 									<fileset dir="${project.build.directory}/${project.artifactId}-${project.version}-bin/modules/job"/>
 								</copy>
-								<copy todir="${spring.xd.home}/modules/job/${project.artifactId}/lib">
+								<copy todir="${spring.xd.home}/modules/job/${spring.xd.job}/lib">
 									<fileset dir="${project.build.directory}/${project.artifactId}-${project.version}-bin/lib"/>
 								</copy>
 							</target>
