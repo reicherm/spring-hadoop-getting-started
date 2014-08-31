@@ -36,23 +36,4 @@
 		reducer="com.springdeveloper.hadoop.IntSumReducer"
 		scope="step" />
 
-<!--
-     <bean id="jobRepository" class="org.springframework.batch.core.repository.support.SimpleJobRepository">
-        <constructor-arg>
-            <bean class="org.springframework.batch.core.repository.dao.MapJobInstanceDao"/>
-        </constructor-arg>
-        <constructor-arg>
-            <bean class="org.springframework.batch.core.repository.dao.MapJobExecutionDao" />
-        </constructor-arg>
-        <constructor-arg>
-            <bean class="org.springframework.batch.core.repository.dao.MapStepExecutionDao"/>
-        </constructor-arg>
-        <constructor-arg>
-            <bean class="org.springframework.batch.core.repository.dao.MapExecutionContextDao"/>
-       </constructor-arg>
-    </bean>
- 
-    <bean id="transactionManager" class="org.springframework.batch.support.transaction.ResourcelessTransactionManager"/>
- -->
- 
 </beans>

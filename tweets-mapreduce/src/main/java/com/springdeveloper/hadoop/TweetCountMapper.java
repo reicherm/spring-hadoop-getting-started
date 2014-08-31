@@ -32,7 +32,7 @@ import org.codehaus.jackson.type.TypeReference;
 public class TweetCountMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
 	
 	private final static IntWritable ONE = new IntWritable(1);
-	private final ObjectMapper mapper = new ObjectMapper(new JsonFactory());
+	private final ObjectMapper jsonMapper = new ObjectMapper(new JsonFactory());
 	
 	@Override
 	protected void setup(Context context) throws IOException,
@@ -45,7 +45,7 @@ public class TweetCountMapper extends Mapper<LongWritable, Text, Text, IntWritab
 	protected void map(LongWritable key, Text value, Context context)
 			throws IOException, InterruptedException {
 		
-		Map<String, Object> tweet = mapper.readValue(value.toString(), 
+		Map<String, Object> tweet = jsonMapper.readValue(value.toString(), 
 				new TypeReference<HashMap<String,  Object>>(){});
 		Map<String, Object> entities = (Map<String, Object>) tweet.get("entities");
 		List<Map<String, Object>> hashTagEntries = null;

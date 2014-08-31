@@ -48,13 +48,6 @@
 			<artifactId>tweets-mapreduce</artifactId>
 			<version>0.1.0</version>
 			<scope>runtime</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.hadoop</groupId>
-					<artifactId>hadoop-mapreduce-client-core</artifactId>
-				</exclusion>
-			</exclusions>
-			
 		</dependency>
 	</dependencies>
 
