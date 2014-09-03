@@ -1,1 +1,1 @@
-create table twitter_influencers (user_name varchar(255), followers int);
+CREATE TABLE IF NOT EXISTS twitter_influencers (user_name VARCHAR(255), followers INT);
