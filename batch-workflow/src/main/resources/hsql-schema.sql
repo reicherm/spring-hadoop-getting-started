@@ -1,0 +1,1 @@
+create table twitter_influencers (user_name varchar(255), followers int);
