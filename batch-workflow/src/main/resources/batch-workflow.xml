@@ -13,19 +13,6 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
 
-	<!--
-	  required to access #{jobParameters['...']}
-	-->
-	<bean class="org.springframework.batch.core.scope.StepScope">
-		<property name="proxyTargetClass" value="true"/>
-	</bean>
-
-     <util:map id="stepExpr" map-class="java.util.HashMap" scope="step">
-        <entry key="inputPath" value="#{jobParameters['input.path']?:'/tweets/input/'}"/>
-        <entry key="tweetDate" value="#{(jobParameters['local.file'].split('_')[1]).substring(0,10)}"/>
-        <entry key="outputPath" value="#{jobParameters['output.path']?:'/tweets/output'}"/>
-    </util:map>
-
 	<context:property-placeholder location="classpath:hive-jdbc.properties"/>
 
 	<hadoop:configuration>
@@ -33,6 +20,19 @@
 		yarn.resourcemanager.address=${spring.hadoop.resourceManagerHost}
 	</hadoop:configuration>
 	
+	<!--
+	  required to access #{jobParameters['...']}
+	-->
+	<bean class="org.springframework.batch.core.scope.StepScope">
+		<property name="proxyTargetClass" value="true"/>
+	</bean>
+
+	<util:map id="stepExpr" map-class="java.util.HashMap" scope="step">
+		<entry key="inputPath" value="#{jobParameters['input.path']?:'/tweets/input/'}"/>
+		<entry key="tweetDate" value="#{(jobParameters['local.file'].split('_')[1]).substring(0,10)}"/>
+		<entry key="outputPath" value="#{jobParameters['output.path']?:'/tweets/output'}"/>
+	</util:map>
+
 	<batch:job id="job">
 
  		<batch:step id="import" next="initHive">
